@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IO_Lab
 {
-    class Calculations
+    class CalculationEngine
     {
         public static int AddNumbers(int num1, int num2)
         {
