@@ -20,13 +20,11 @@ namespace IO_Lab
 
         public static int SubNumbers(int num1, int num2)
         {
-            // if (num1 < num2) return 0;
             return num1 - num2;
         }
 
         public static double SubNumbers(double num1, double num2)
         {
-            // if (num1 < num2) return 0;
             return num1 - num2;
         }
 

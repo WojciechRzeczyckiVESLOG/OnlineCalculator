@@ -20,6 +20,7 @@ namespace IO_Lab
             parseInput();
             calculateResult();
         }
+        public Parser() { }
 
         private void parseInput()
         {
@@ -27,21 +28,28 @@ namespace IO_Lab
             for(int i = 0; i < inputSize; i++)
             {
                 double tmp = 0.0, num = 0.0;
-                bool isNum = false;
-                while(i + (int)tmp < inputSize && Char.IsNumber(userInput, i + (int)tmp)) // || (Char.IsNumber(userInput, i + (int)tmp - 1) && userInput.ElementAt(i + (int)tmp) == '.') && Char.IsNumber(userInput, i + (int)tmp + 1))
+                bool isNum = false, isDouble = false;
+                string tmp_str = "";
+                // if checked element is a number, count how many elements long it is
+                while(i + (int)tmp < inputSize && (Char.IsNumber(userInput, i + (int)tmp) || 
+                    (i + (int)tmp > 0 && Char.IsNumber(userInput, i + (int)tmp - 1) && userInput.ElementAt(i + (int)tmp) == ',' && Char.IsNumber(userInput, i + (int)tmp + 1))))
                 {
+                    if (userInput.ElementAt(i + (int)tmp) == '.')
+                        isDouble = true;
                     tmp++;
                     isNum = true;
                 }
-                for(int k = i; k <= (int)tmp + i - 1; k++)
-                {
-                    num += (int)(Char.GetNumericValue(userInput, k) * Math.Pow(10.0, tmp + i - 1 - k));
-                }
+                // if number was found above, convert it to double and add it to vector
                 if (isNum == true)
                 {
-                    numbers.Add(num);
+                    for (int k = i; k <= (int)tmp + i - 1; k++)
+                    {
+                        tmp_str += userInput.ElementAt(k);
+                    }
+                    numbers.Add(Convert.ToDouble(tmp_str));
                     i--;
                 }
+                // else it means that our element is an operation character
                 else
                 {
                     switch (userInput.ElementAt(i))
@@ -59,7 +67,6 @@ namespace IO_Lab
 
         private void calculateResult()
         {
-            double res = 0;
             if(operations.Count() == numbers.Count())
             {
                 numbers[0] *= -1;
@@ -73,10 +80,12 @@ namespace IO_Lab
                     case '-': numbers[i + 1] = CalculationEngine.SubNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '*': numbers[i + 1] = CalculationEngine.MulNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '/': numbers[i + 1] = CalculationEngine.DivNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
-                    default: throw new FormatException("Wrong operation."); break;
+                    default: throw new FormatException("Wrong operation.");
                 }
             }
             this.result = numbers.ElementAt(numbers.Count() - 1);
+            numbers.Clear();
+            operations.Clear();
         }
 
         public void setUserInput(string userInput)
@@ -86,8 +95,14 @@ namespace IO_Lab
 
         public double getResult()
         {
-            return result;
+            return this.result;
         }
 
+        public double execute()
+        {
+            parseInput();
+            calculateResult();
+            return result;
+        }
     }
 }

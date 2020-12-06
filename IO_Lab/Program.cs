@@ -10,8 +10,8 @@ namespace IO_Lab
     {
         static void Main(string[] args)
         {
-            Parser p1 = new Parser("-1*2+43+21+9-17");
-            Console.WriteLine(p1.getResult());
+            Parser p1 = new Parser("-1*2,3+43,8+21+9,7-17");
+            Console.WriteLine(p1.execute());
         }
     }
 }
