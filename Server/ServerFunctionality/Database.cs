@@ -126,7 +126,7 @@ namespace DatabaseConnection
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
-            list[4] = new List<string>();
+            list[3] = new List<string>();
 
             //Open connection
             if (this.OpenConnection() == true)

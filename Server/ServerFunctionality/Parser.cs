@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerFunctionality
 {
-    class Parser
+    public class Parser
     {
         private string userInput;
         private List<double> numbers = new List<double>();

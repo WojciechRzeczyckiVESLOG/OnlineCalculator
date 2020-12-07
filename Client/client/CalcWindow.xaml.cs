@@ -72,6 +72,8 @@ namespace GUI
 
         private void keyboardHandler(object sender, KeyEventArgs e)
         {
+            if (equationText == "") WPFequation.Text = "";
+
             if (e.Key == Key.NumPad0 || e.Key == Key.D0)
             {
                 equationText += "0";
