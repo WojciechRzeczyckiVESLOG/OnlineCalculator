@@ -39,6 +39,7 @@
         <Button x:Name="Button8" Grid.Column="2" Grid.Row="5" Content="8" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="Button9" Grid.Column="3" Grid.Row="5" Content="9" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="Button0" Grid.Column="2" Grid.Row="6" Content="0" FontSize="48" Click="buttonClicked"></Button>
+        <Button x:Name="ButtonComa" Background="#FF8C87" Grid.Column="3" Grid.Row="6" Content="," FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="ButtonPlus" Background="#FF8C87" Grid.Column="0" Grid.Row="7" Content="+" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="ButtonMinus" Background="#FF8C87" Grid.Column="1" Grid.Row="7" Content="-" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="ButtonStar" Background="#FF8C87" Grid.Column="2" Grid.Row="7" Content="*" FontSize="48" Click="buttonClicked"></Button>

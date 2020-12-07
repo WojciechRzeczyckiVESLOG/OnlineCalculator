@@ -35,12 +35,43 @@ namespace GUI
         {
             InitializeComponent();
             this.client = client;
+            equationText = "";
+        }
+
+        private void buttonClicked(object sender, RoutedEventArgs e)
+        {
+            if (equationText == "") WPFequation.Text = "";
+            if (WPFequation.Text == "Enter your favourite equation . . .") WPFequation.Text = "";
+            equationText += (sender as Button).Content.ToString();
+            WPFequation.Text += (sender as Button).Content.ToString();
+        }
+
+        private void buttonEqualizeClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                client.receivedMessage = ""; 
+                client.SendMessage((equationText));
+                client.TryReceive();
+
+            }
+            catch (SocketException)
+            {
+                WPFequation.Text = "Connection Error!";
+            }
+
+            WPFequation.Text = client.receivedMessage;
+            equationText = "";
+        }
+
+        private void ResetClicked(object sender, RoutedEventArgs e)
+        {
+            equationText = "";
+            WPFequation.Text = "Enter your favourite equation . . .";
         }
 
         private void keyboardHandler(object sender, KeyEventArgs e)
         {
-            if (WPFequation.Text == "Enter your favourite equation . . .") WPFequation.Text = "";
-
             if (e.Key == Key.NumPad0 || e.Key == Key.D0)
             {
                 equationText += "0";
@@ -115,39 +146,11 @@ namespace GUI
             {
                 buttonEqualizeClicked(sender, e);
             }
-        }
-
-        private void buttonClicked(object sender, RoutedEventArgs e)
-        {
-            if (equationText == "") WPFequation.Text = "";
-            if (WPFequation.Text == "Enter your favourite equation . . .") WPFequation.Text = "";
-            equationText += (sender as Button).Content.ToString();
-            WPFequation.Text += (sender as Button).Content.ToString();
-        }
-
-        private void buttonEqualizeClicked(object sender, RoutedEventArgs e)
-        {
-            try
+            if (e.Key == Key.OemComma)
             {
-                client.receivedMessage = ""; 
-                client.SendMessage((equationText));
-                client.TryReceive();
+                equationText += ",";
+                WPFequation.Text += ",";
             }
-            catch (SocketException)
-            {
-                WPFequation.Text = "Connection Error!";
-            }
-
-            WPFequation.Text = client.receivedMessage;
-            equationText = "";
         }
-
-        private void ResetClicked(object sender, RoutedEventArgs e)
-        {
-            equationText = "";
-            WPFequation.Text = "Enter your favourite equation . . .";
-        }
-
-
     }
 }
