@@ -117,7 +117,7 @@ namespace ServerFunctionality
 
                         database.AddHistory(mess);
                         
-                        sendMessage = parser.parse().ToString();
+                        sendMessage = parser.execute().ToString();
 
                         Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
 
