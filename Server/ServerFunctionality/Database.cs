@@ -35,7 +35,7 @@ namespace DatabaseConnection
             database = "users";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=User1;" + "PASSWORD=Passw0rd;";
+            database + ";" + "UID=test;" + "PASSWORD=test;";
 
             connection = new MySqlConnection(connectionString);
         }
@@ -103,29 +103,6 @@ namespace DatabaseConnection
             }
         }
 
-        //Update statement
-        public void Update()
-        {
-            string query = "";
-
-            //Open connection
-            if (this.OpenConnection() == true)
-            {
-                //create mysql command
-                MySqlCommand cmd = new MySqlCommand();
-                //Assign the query using CommandText
-                cmd.CommandText = query;
-                //Assign the connection using Connection
-                cmd.Connection = connection;
-
-                //Execute query
-                cmd.ExecuteNonQuery();
-
-                //close connection
-                this.CloseConnection();
-            }
-        }
-
         //Delete statement
         public void Delete()
         {
@@ -145,10 +122,11 @@ namespace DatabaseConnection
             string query = "SELECT * FROM users";
 
             //Create a list to store the result
-            List<string>[] list = new List<string>[3];
+            List<string>[] list = new List<string>[4];
             list[0] = new List<string>();
             list[1] = new List<string>();
             list[2] = new List<string>();
+            list[4] = new List<string>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -164,6 +142,7 @@ namespace DatabaseConnection
                     list[0].Add(dataReader["id"] + "");
                     list[1].Add(dataReader["user"] + "");
                     list[2].Add(dataReader["password"] + "");
+                    list[3].Add(dataReader["quantity"] + "");
                 }
 
                 //close Data Reader
@@ -207,9 +186,55 @@ namespace DatabaseConnection
             }
         }
 
+
+        //Update statement
+        public void Update()
+        {
+            string query = "UPDATE users SET quantity = quantity +1 WHERE user = '" + uid + "'";
+
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //create mysql command
+                MySqlCommand cmd = new MySqlCommand();
+                //Assign the query using CommandText
+                cmd.CommandText = query;
+                //Assign the connection using Connection
+                cmd.Connection = connection;
+
+                //Execute query
+                cmd.ExecuteNonQuery();
+
+                //close connection
+                this.CloseConnection();
+            }
+        }
+
+        public void AddHistory(string operation)
+        {
+            string query = "INSERT INTO history(user, operation) VALUES (' " + uid + "', '" + operation + "')";
+
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //create mysql command
+                MySqlCommand cmd = new MySqlCommand();
+                //Assign the query using CommandText
+                cmd.CommandText = query;
+                //Assign the connection using Connection
+                cmd.Connection = connection;
+
+                //Execute query
+                cmd.ExecuteNonQuery();
+
+                //close connection
+                this.CloseConnection();
+            }
+        }
+
         public int Check()
         {
-            string query = "SELECT COUNT(*) FROM users where login = '" + uid + "' AND password = '" + password + "'";
+            string query = "SELECT COUNT(*) FROM users where user = '" + uid + "' AND password = '" + password + "'";
             int Count = -1;
 
             //Open Connection

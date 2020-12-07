@@ -64,6 +64,7 @@ namespace ServerFunctionality
 
                         login = (Encoding.ASCII.GetString(buffer, 0, message_length)).Split(' ');
 
+
                         database.SetUser(login.ElementAt(0), login.ElementAt(1));
                         database.Check();
                         sendMessage = database.message;
@@ -72,7 +73,11 @@ namespace ServerFunctionality
                         Console.WriteLine($"Ilosc wyslanych znakow ({sendMessage}): {sendMessage.Length}");
                         System.Threading.Thread.Sleep(500);
 
-                        if (sendMessage == "ACK") break;
+                        if (sendMessage == "ACK")
+                        {
+                            database.Update();
+                            break;
+                        }
                     }
                 }
                 catch (System.IO.IOException)
@@ -95,6 +100,7 @@ namespace ServerFunctionality
             //NetworkStream netStream = client.GetStream();
 
             string sendMessage = "";
+            string mess = "";
 
             while (true)
             {
@@ -106,7 +112,11 @@ namespace ServerFunctionality
                     //if to ignore "enter" key
                     if (Encoding.ASCII.GetString(buffer, 0, message_length) != "\r\n" || message_length < 0)
                     {
-                        parser.setUserInput(Encoding.ASCII.GetString(buffer, 0, message_length));
+                        mess = Encoding.ASCII.GetString(buffer, 0, message_length);
+                        parser.setUserInput(mess);
+
+                        database.AddHistory(mess);
+                        
                         sendMessage = parser.parse().ToString();
 
                         Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
