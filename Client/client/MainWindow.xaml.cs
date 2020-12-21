@@ -27,14 +27,14 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
-            
+
         }
 
         private void logClicked(object sender, RoutedEventArgs e)
         {
             try
             {
-                client.SendMessage((logField.Text + " " + passField.Text));
+                client.SendMessage(("log " + logField.Text + " " + passField.Text));
                 client.TryReceive();
 
             }
@@ -43,11 +43,16 @@ namespace GUI
 
             }
 
-            if (client.receivedMessage == "ACK") {
+            if (client.receivedMessage == "ACK")
+            {
                 this.Hide();
                 CalcWindow window = new CalcWindow(client);
                 window.Show();
                 this.Close();
+            }
+            else
+            {
+                MessageBox.Show("login and password don't match.", "ERROR");
             }
 
             client.receivedMessage = "";
@@ -58,10 +63,10 @@ namespace GUI
         {
 
 
-  
-            
+
+
         }
-        
+
         private void tryConnect()
         {
             if (client != null) client.CloseConnection();
@@ -90,12 +95,42 @@ namespace GUI
         }
         private void logButtInitialized(object sender, EventArgs e)
         {
-  
+
         }
 
         private void ReconnectClicked(object sender, RoutedEventArgs e)
         {
             tryConnect();
+        }
+
+        private void regClicked(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                client.SendMessage(("reg " + logField.Text + " " + passField.Text));
+                client.TryReceive();
+
+            }
+            catch (SocketException)
+            {
+
+            }
+
+            if (client.receivedMessage == "ACK")
+            {
+                this.Hide();
+                CalcWindow window = new CalcWindow(client);
+                window.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("This login is already taken", "ERROR");
+            }
+
+            client.receivedMessage = "";
+
         }
     }
 }

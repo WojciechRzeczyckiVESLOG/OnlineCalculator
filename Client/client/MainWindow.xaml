@@ -39,12 +39,13 @@
         <TextBlock Text="password:" Grid.Column="1" Grid.Row="5" VerticalAlignment="Bottom" FontSize="20"></TextBlock>
 
         <TextBox Name="passField" Height="25" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" ></TextBox>
-        <Button Name="logButton" Height="25" Content="SIGN IN" Grid.Column="3" Grid.Row="7" Click="logClicked" Initialized="logButtInitialized" ></Button>
+        <Button Name="logButton" VerticalAlignment="Top" Height="25" Content="SIGN IN" Grid.Column="3" Grid.Row="7" Click="logClicked" Initialized="logButtInitialized" ></Button>
+        <Button Name="regButton" VerticalAlignment="Top" Height="25" Content="REGISTER" Grid.Column="3" Grid.Row="8" Click="regClicked"  ></Button>
 
         <TextBlock Name="serverStatus" Foreground="Crimson" Text="Server Status: Offline" Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="20" Initialized="TcpInit"></TextBlock>
         <Button Grid.Column="5" Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="#FFBF78" Background="#008DFF" Height="25" Width="70" Content="Reconnect" FontSize="12" Click="ReconnectClicked" ></Button>
-        
-        
+
+
         <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="6" />
 
     </Grid>
