@@ -46,8 +46,7 @@ namespace ServerFunctionality
             byte[] bufferSend = new byte[128];
             //NetworkStream netStream = client.GetStream();
     
-            String[] login;
-
+            String[] text;
 
             string sendMessage = "";       
             while (true)
@@ -62,12 +61,29 @@ namespace ServerFunctionality
                     {
                         Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
 
-                        login = (Encoding.ASCII.GetString(buffer, 0, message_length)).Split(' ');
+                        text = (Encoding.ASCII.GetString(buffer, 0, message_length)).Split(' ');
 
+                        database.SetUser(text.ElementAt(1), text.ElementAt(2));                  
 
-                        database.SetUser(login.ElementAt(0), login.ElementAt(1));
-                        database.Check();
-                        sendMessage = database.message;
+                        if (text[0] == "reg")
+                        {
+                            database.Check();
+                            sendMessage = database.message;
+                            if(sendMessage == "ACK")
+                            {
+                                sendMessage = "NACK";
+                            }
+                            else if(sendMessage == "NACK")
+                            {
+                                database.Insert(text[1], text[2]);
+                                sendMessage = "ACK";
+                            }
+                        }
+                        else if(text[0] == "log")
+                        {
+                            database.Check();
+                            sendMessage = database.message;                    
+                        }                  
 
                         netStream.Write(Encoding.ASCII.GetBytes(sendMessage), 0, sendMessage.Length);
                         Console.WriteLine($"Ilosc wyslanych znakow ({sendMessage}): {sendMessage.Length}");

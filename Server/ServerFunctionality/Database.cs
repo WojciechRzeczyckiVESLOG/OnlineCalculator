@@ -85,9 +85,9 @@ namespace DatabaseConnection
         }
 
         //Insert statement
-        public void Insert()
+        public void Insert(string log, string pass)
         {
-            string query = "";
+            string query = "INSERT INTO users (user, password, quantity) VALUES('" + log + "', '" + pass + "', 0)";
 
             //open connection
             if (this.OpenConnection() == true)
