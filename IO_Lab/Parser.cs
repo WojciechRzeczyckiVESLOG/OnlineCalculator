@@ -18,6 +18,7 @@ namespace IO_Lab
         {
             this.userInput = userInput;
             parseInput();
+            CalculationEngine.FixOrder(ref numbers, ref operations);
             calculateResult();
         }
         public Parser() { }
@@ -67,11 +68,6 @@ namespace IO_Lab
 
         private void calculateResult()
         {
-            if(operations.Count() == numbers.Count())
-            {
-                numbers[0] *= -1;
-                operations.RemoveAt(0);
-            }
             for(int i = 0; i < operations.Count(); i++)
             {
                 switch (operations.ElementAt(i))
@@ -101,6 +97,7 @@ namespace IO_Lab
         public double execute()
         {
             parseInput();
+            CalculationEngine.FixOrder(ref numbers, ref operations);
             calculateResult();
             return result;
         }
