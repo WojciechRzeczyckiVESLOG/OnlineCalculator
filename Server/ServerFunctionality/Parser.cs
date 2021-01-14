@@ -59,6 +59,7 @@ namespace ServerFunctionality
                         case '-': operations.Add('-'); break;
                         case '*': operations.Add('*'); break;
                         case '/': operations.Add('/'); break;
+                        case '^': operations.Add('^'); break;
                         default: throw new FormatException("Wrong operation."); break;
                     }
                 }
@@ -76,6 +77,7 @@ namespace ServerFunctionality
                     case '-': numbers[i + 1] = CalculationEngine.SubNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '*': numbers[i + 1] = CalculationEngine.MulNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '/': numbers[i + 1] = CalculationEngine.DivNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
+                    case '^': numbers[i + 1] = CalculationEngine.PowNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     default: throw new FormatException("Wrong operation.");
                 }
             }
