@@ -17,7 +17,14 @@ namespace IO_Lab
             }
             for (int i = 0; i < operations.Count(); i++)
             {
-                if(operations.ElementAt(i) == '*')
+                if (operations.ElementAt(i) == '^')
+                {
+                    numbers[i] = PowNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1));
+                    numbers.RemoveAt(i + 1);
+                    operations.Remove('^');
+                    i--;
+                }
+                if (operations.ElementAt(i) == '*')
                 {
                     numbers[i] = MulNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1));
                     numbers.RemoveAt(i + 1);
@@ -71,6 +78,15 @@ namespace IO_Lab
         public static double DivNumbers(double num1, double num2)
         {
             return num1 / num2;
+        }
+
+        public static double PowNumbers(double num1, double num2)
+        {
+            return Math.Pow(num1, num2);
+        }
+        public static double PowNumbers(int num1, int num2)
+        {
+            return Math.Pow(Convert.ToDouble(num1), Convert.ToDouble(num2));
         }
     }
 }

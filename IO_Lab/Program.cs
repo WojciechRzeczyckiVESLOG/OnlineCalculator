@@ -10,9 +10,9 @@ namespace IO_Lab
     {
         static void Main(string[] args)
         {
-            Parser p1 = new Parser("-1*2,3+43,8+21+9,7-17*2");
+            Parser p1 = new Parser("-1*2,3+2^2+43,8+21+9,7-17*2+2^2");
             Console.WriteLine(p1.getResult());
-            p1.setUserInput("2*3-1-10+12*3-7");
+            p1.setUserInput("2*3-1-10+12*3-7+2^3");
             p1.execute();
             Console.WriteLine(p1.getResult());
         }

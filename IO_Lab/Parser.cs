@@ -26,17 +26,16 @@ namespace IO_Lab
         private void parseInput()
         {
             int inputSize = userInput.Length;
+
             for(int i = 0; i < inputSize; i++)
             {
-                double tmp = 0.0, num = 0.0;
-                bool isNum = false, isDouble = false;
+                double tmp = 0.0;
+                bool isNum = false;
                 string tmp_str = "";
                 // if checked element is a number, count how many elements long it is
                 while(i + (int)tmp < inputSize && (Char.IsNumber(userInput, i + (int)tmp) || 
                     (i + (int)tmp > 0 && Char.IsNumber(userInput, i + (int)tmp - 1) && userInput.ElementAt(i + (int)tmp) == ',' && Char.IsNumber(userInput, i + (int)tmp + 1))))
                 {
-                    if (userInput.ElementAt(i + (int)tmp) == '.')
-                        isDouble = true;
                     tmp++;
                     isNum = true;
                 }
@@ -59,6 +58,7 @@ namespace IO_Lab
                         case '-': operations.Add('-'); break;
                         case '*': operations.Add('*'); break;
                         case '/': operations.Add('/'); break;
+                        case '^': operations.Add('^'); break;
                         default: throw new FormatException("Wrong operation."); break;
                     }
                 }
@@ -76,6 +76,7 @@ namespace IO_Lab
                     case '-': numbers[i + 1] = CalculationEngine.SubNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '*': numbers[i + 1] = CalculationEngine.MulNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     case '/': numbers[i + 1] = CalculationEngine.DivNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
+                    case '^': numbers[i + 1] = CalculationEngine.PowNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1)); break;
                     default: throw new FormatException("Wrong operation.");
                 }
             }
@@ -84,6 +85,7 @@ namespace IO_Lab
             operations.Clear();
         }
 
+        /* User API */
         public void setUserInput(string userInput)
         {
             this.userInput = userInput;
