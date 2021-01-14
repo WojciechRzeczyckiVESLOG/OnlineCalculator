@@ -26,6 +26,15 @@ namespace ServerFunctionality
         private void parseInput()
         {
             int inputSize = userInput.Length;
+            while (userInput.IndexOf("sin", 0, inputSize - 1) != -1 ||
+                userInput.IndexOf("cos", 0, inputSize - 1) != -1 ||
+                userInput.IndexOf("tan", 0, inputSize - 1) != -1 ||
+                userInput.IndexOf("ctg", 0, inputSize - 1) != -1)
+            {
+                solveTrigonometric();
+                inputSize = userInput.Length;
+            }
+
             for (int i = 0; i < inputSize; i++)
             {
                 double tmp = 0.0, num = 0.0;
@@ -65,6 +74,49 @@ namespace ServerFunctionality
                 }
                 i += (int)tmp;
             }
+        }
+
+        private void solveTrigonometric()
+        {
+            int inputSize = userInput.Length;
+            int startIndex = 0;
+            string trig = "";
+            if (userInput.IndexOf("sin", 0, inputSize - 1) != -1)
+            {
+                startIndex = userInput.IndexOf("sin", 0, inputSize - 1) + 4;
+                trig = "sin";
+            }
+            else if (userInput.IndexOf("cos", 0, inputSize - 1) != -1)
+            {
+                startIndex = userInput.IndexOf("cos", 0, inputSize - 1) + 4;
+                trig = "cos";
+            }
+            else if (userInput.IndexOf("tan", 0, inputSize - 1) != -1)
+            {
+                startIndex = userInput.IndexOf("tan", 0, inputSize - 1) + 4;
+                trig = "tan";
+            }
+            else if (userInput.IndexOf("ctg", 0, inputSize - 1) != -1)
+            {
+                startIndex = userInput.IndexOf("ctg", 0, inputSize - 1) + 4;
+                trig = "ctg";
+            }
+
+            int length = userInput.IndexOf(")", 0, inputSize) - startIndex;
+            string equation = userInput.Substring(startIndex, length);
+            Parser ptrig = new Parser(equation);
+
+            userInput = userInput.Remove(startIndex - 4, length + 5);
+            double result = 0;
+            switch (trig)
+            {
+                case "sin": result = Math.Sin(ptrig.getResult() * Math.PI / 180); break;
+                case "cos": result = Math.Cos(ptrig.getResult() * Math.PI / 180); break;
+                case "tan": result = Math.Tan(ptrig.getResult() * Math.PI / 180); break;
+                case "ctg": result = Math.Atan2(1, ptrig.getResult() * Math.PI / 180); break;
+                default: throw new FormatException("Wrong operation.");
+            }
+            userInput = userInput.Insert(startIndex - 4, result.ToString());
         }
 
         private void calculateResult()
