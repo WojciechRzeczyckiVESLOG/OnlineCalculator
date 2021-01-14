@@ -15,6 +15,9 @@ namespace IO_Lab
             p1.setUserInput("2*3-1-10+12*3-7+2^3");
             p1.execute();
             Console.WriteLine(p1.getResult());
+            p1.setUserInput("cos(180)");
+            p1.execute();
+            Console.WriteLine(p1.getResult());
         }
     }
 }
