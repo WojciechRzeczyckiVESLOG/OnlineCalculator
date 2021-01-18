@@ -159,7 +159,6 @@ namespace ServerFunctionality
                             logoutfromapp = true;
 
                             database.Logout();
-                            Console.WriteLine("DUPA DUPA \n");
 
                             sendMessage = mess;
 

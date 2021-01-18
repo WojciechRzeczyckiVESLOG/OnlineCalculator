@@ -48,5 +48,14 @@ namespace Tests
             Assert.IsNotNull(count);
         }
 
+        [TestMethod]
+        public void InsertTest()
+        {
+            database.Insert("test123", "test123");
+            database.SetUser("test123", "test123");
+            int answer = database.Check();
+            Assert.AreEqual(1, answer);
+        }
+
     }
 }
