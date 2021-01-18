@@ -1,6 +1,7 @@
 ﻿using GUI.TCPconnection;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -20,15 +21,17 @@ namespace GUI
     /// Interaction logic for CalcWindow.xaml
     /// </summary>
 
-    
+
     public partial class CalcWindow : Window
     {
         TCPclient client;
         protected string equationText;
+        public string closeCode = "";
         public CalcWindow()
         {
             InitializeComponent();
             equationText = "";
+
         }
 
         public CalcWindow(TCPclient client)
@@ -36,6 +39,7 @@ namespace GUI
             InitializeComponent();
             this.client = client;
             equationText = "";
+
         }
 
         private void buttonClicked(object sender, RoutedEventArgs e)
@@ -48,20 +52,33 @@ namespace GUI
 
         private void buttonEqualizeClicked(object sender, RoutedEventArgs e)
         {
-            try
+            if (equationText != "")
             {
-                client.receivedMessage = ""; 
-                client.SendMessage((equationText));
-                client.TryReceive();
+                try
+                {
+                    appendMode();
+                    client.receivedMessage = "";
+                    client.SendMessage((equationText));
+                    client.TryReceive();
 
-            }
-            catch (SocketException)
-            {
-                WPFequation.Text = "Connection Error!";
-            }
+                }
+                catch (SocketException)
+                {
+                    WPFequation.Text = "Connection Error!";
+                }
 
-            WPFequation.Text = client.receivedMessage;
-            equationText = "";
+                WPFequation.Text = client.receivedMessage;
+                if (WPFequation.Text == "LOGOUT")
+                {
+                    this.Hide();
+                    MainWindow window = new MainWindow();
+                    window.Show();
+
+                    this.closeCode = "LOGOUT";
+                    this.Close();
+                }
+                equationText = "";
+            }
         }
 
         private void ResetClicked(object sender, RoutedEventArgs e)
@@ -154,5 +171,100 @@ namespace GUI
                 WPFequation.Text += ",";
             }
         }
+
+        private void LogoutClicked(object sender, RoutedEventArgs e)
+        {
+            client.SendMessage("LOGOUT");
+            this.Hide();
+            MainWindow window = new MainWindow();
+            window.Show();
+
+            this.closeCode = "LOGOUT";
+            this.Close();
+        }
+
+        private void closedEvent(object sender, EventArgs e)
+        {
+            this.closeCode = "EXIT";
+            this.Close();
+        }
+
+        private async void listenServer()
+        {
+            while (true)
+            {
+                //comment the whole body to test offline
+                try
+                {
+                    this.client.receivedMessage = "";
+                    this.client.TryReceive();
+
+                }
+                catch (SocketException)
+                {
+                    WPFequation.Text = "Connection Error!";
+                }
+
+                WPFequation.Text = client.receivedMessage;
+                if (client.receivedMessage == "LOGOUT")
+                {
+                    this.Hide();
+                    MainWindow window = new MainWindow();
+                    window.Show();
+
+                    this.closeCode = "LOGOUT";
+                    this.Close();
+                }
+
+
+                await Task.Delay(TimeSpan.FromMilliseconds(5));
+            }
+        }
+
+        private void BindModes()
+        {
+            DataTable modes = new DataTable();
+
+            //setting the columns (something like CREATE TABLE in SQL)
+            modes.Columns.Add("Name");
+            modes.Columns.Add("ID");
+
+            //Adding rows (INSERT INTO in SQL)
+            modes.Rows.Add("None", 1);
+            modes.Rows.Add("sin()", 2);
+            modes.Rows.Add("cos()", 3);
+            modes.Rows.Add("tg()", 4);
+            modes.Rows.Add("ctg()", 5);
+
+            Modes.ItemsSource = modes.DefaultView;
+            Modes.DisplayMemberPath = "Name";
+            Modes.SelectedValuePath = "ID";
+        }
+
+        private void ModesInit(object sender, EventArgs e)
+        {
+
+            this.BindModes();
+        }
+
+        private void appendMode()
+        {
+            switch (Modes.SelectedIndex)
+            {
+                case 1: break;
+                case 2: break;
+                case 3: this.equationText = "sin(" + equationText + ")"; break;
+                case 4: this.equationText = "cos(" + equationText + ")"; break;
+                case 5: this.equationText = "tg(" + equationText + ")"; break;
+                case 6: this.equationText = "ctg(" + equationText + ")"; break;
+                default: break;
+            }
+        }
+
+        private void LogoutInit(object sender, EventArgs e)
+        {
+            //listenServer();
+        }
+
     }
-}
+    }

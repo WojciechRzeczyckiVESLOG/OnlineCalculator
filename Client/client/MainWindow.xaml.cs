@@ -34,6 +34,7 @@ namespace GUI
         {
             try
             {
+                //comment these 2 lines to test offline
                 client.SendMessage(("log " + logField.Text + " " + passField.Text));
                 client.TryReceive();
 
@@ -43,11 +44,22 @@ namespace GUI
 
             }
 
-            if (client.receivedMessage == "ACK")
-            {
+            //to test offline:
+            //if(true)
+                if (client.receivedMessage == "ACK")
+                {
                 this.Hide();
+                //to test offline:
+                //CalcWindow window = new CalcWindow();
                 CalcWindow window = new CalcWindow(client);
                 window.Show();
+                
+                string exitMessage = "";
+                while (exitMessage != "LOGOUT" || exitMessage != "EXIT")
+                {
+
+                }
+
                 this.Close();
             }
             else
@@ -55,6 +67,7 @@ namespace GUI
                 MessageBox.Show("login and password don't match.", "ERROR");
             }
 
+            //comment this line to test offline
             client.receivedMessage = "";
 
         }
@@ -72,7 +85,7 @@ namespace GUI
             if (client != null) client.CloseConnection();
             try
             {
-                //comment this line to test
+                //comment this line to test offline
                 client = new TCPclient("127.0.0.1", 2137);
                 serverStatus.Foreground = (Brush)(new System.Windows.Media.BrushConverter()).ConvertFromString("#09EE09");
                 serverStatus.Text = "Server status: Online!";
@@ -108,6 +121,7 @@ namespace GUI
 
             try
             {
+                //comment these 2 lines to test offline
                 client.SendMessage(("reg " + logField.Text + " " + passField.Text));
                 client.TryReceive();
 
@@ -117,18 +131,22 @@ namespace GUI
 
             }
 
-            if (client.receivedMessage == "ACK")
-            {
+            //to test offline:
+            //if (true)
+                if (client.receivedMessage == "ACK")
+                {
                 this.Hide();
                 CalcWindow window = new CalcWindow(client);
                 window.Show();
-                this.Close();
+                MessageBox.Show("Successfully registered! Now you can log in.");
+ 
             }
             else
             {
                 MessageBox.Show("This login is already taken", "ERROR");
             }
 
+            //coment this line to test offline
             client.receivedMessage = "";
 
         }
