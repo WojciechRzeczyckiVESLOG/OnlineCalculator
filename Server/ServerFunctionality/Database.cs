@@ -62,7 +62,7 @@ namespace DatabaseConnection
                         break;
 
                     case 1045:
-                        this.message ="Invalid username/password, please try again";
+                        this.message = "Invalid username/password, please try again";
                         break;
                 }
                 return false;
@@ -87,7 +87,7 @@ namespace DatabaseConnection
         //Insert statement
         public void Insert(string log, string pass)
         {
-            string query = "INSERT INTO users (user, password, quantity) VALUES('" + log + "', '" + pass + "', 0)";
+            string query = "INSERT INTO users (user, password, quantity, lastlogin, lastlogout) VALUES('" + log + "', '" + pass + "', 0, '', '')";
 
             //open connection
             if (this.OpenConnection() == true)
@@ -190,7 +190,8 @@ namespace DatabaseConnection
         //Update statement
         public void Update()
         {
-            string query = "UPDATE users SET quantity = quantity +1 WHERE user = '" + uid + "'";
+            DateTime lastlogin = DateTime.Now;
+            string query = "UPDATE users SET quantity = quantity +1, lastlogin = '" + lastlogin.ToString() + "' WHERE user = '" + uid + "'";
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -209,6 +210,30 @@ namespace DatabaseConnection
                 this.CloseConnection();
             }
         }
+
+        public void Logout()
+        {
+            DateTime lastlogout = DateTime.Now;
+            string query = "UPDATE users SET lastlogout = '" + lastlogout.ToString() + "' WHERE user = '" + uid + "'";
+
+            //Open connection
+            if (this.OpenConnection() == true)
+            {
+                //create mysql command
+                MySqlCommand cmd = new MySqlCommand();
+                //Assign the query using CommandText
+                cmd.CommandText = query;
+                //Assign the connection using Connection
+                cmd.Connection = connection;
+
+                //Execute query
+                cmd.ExecuteNonQuery();
+
+                //close connection
+                this.CloseConnection();
+            }
+        }
+
 
         public void AddHistory(string operation)
         {
@@ -249,13 +274,13 @@ namespace DatabaseConnection
                 //close Connection
                 this.CloseConnection();
 
-                if(Count == 1) message = "ACK";
+                if (Count == 1) message = "ACK";
                 else message = "NACK";
 
                 return Count;
             }
             else
-            { 
+            {
                 return Count;
             }
 
