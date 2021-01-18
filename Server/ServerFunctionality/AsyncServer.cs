@@ -9,6 +9,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.IO;
 using ServerFunctionality;
+using System.Diagnostics;
 using DatabaseConnection;
 
 namespace ServerFunctionality
@@ -117,8 +118,11 @@ namespace ServerFunctionality
 
             string sendMessage = "";
             string mess = "";
-
-            while (true)
+            bool logoutfromapp = false;
+            Stopwatch stopWatch = new Stopwatch();
+            bool x = true;
+            double ts;
+            while (logoutfromapp == false)
             {
                 int message_length = -1;
 
@@ -129,19 +133,54 @@ namespace ServerFunctionality
                     if (Encoding.ASCII.GetString(buffer, 0, message_length) != "\r\n" || message_length < 0)
                     {
                         mess = Encoding.ASCII.GetString(buffer, 0, message_length);
-                        parser.setUserInput(mess);
+                        if(x == true)
+                        {
+                            x = false;
+                        }
+                        else
+                        {
+                            stopWatch.Start();
+                            ts = stopWatch.Elapsed.TotalSeconds;
+                            Console.WriteLine("DUPA\n" + ts);
 
-                        database.AddHistory(mess);
-                        
-                        sendMessage = parser.execute().ToString();
+                            if (ts > 30){
+                                mess = "LOGOUT";
+                            }
+                        }
 
-                        Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
+                        stopWatch.Restart();
 
 
-                        netStream.Write(Encoding.ASCII.GetBytes(sendMessage), 0, sendMessage.Length);
-                        Console.WriteLine($"Ilosc wyslanych znakow ({sendMessage}): {sendMessage.Length}");
-                        System.Threading.Thread.Sleep(500);
+                        if (mess == "LOGOUT")
+                        {
 
+                            Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
+                            logoutfromapp = true;
+
+                            database.Logout();
+                            Console.WriteLine("DUPA DUPA \n");
+
+                            sendMessage = mess;
+
+                            netStream.Write(Encoding.ASCII.GetBytes(sendMessage), 0, sendMessage.Length);
+                            Console.WriteLine($"Ilosc wyslanych znakow ({sendMessage}): {sendMessage.Length}");
+                            System.Threading.Thread.Sleep(500);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Ilosc odebranych znakow: ({Encoding.ASCII.GetString(buffer, 0, message_length)}): {message_length}");
+                            parser.setUserInput(mess);
+
+                            database.AddHistory(mess);
+
+                            sendMessage = parser.execute().ToString();
+
+
+
+                            netStream.Write(Encoding.ASCII.GetBytes(sendMessage), 0, sendMessage.Length);
+                            Console.WriteLine($"Ilosc wyslanych znakow ({sendMessage}): {sendMessage.Length}");
+                            System.Threading.Thread.Sleep(500);
+                        }                   
                     }
                 }
                 catch (System.IO.IOException)
