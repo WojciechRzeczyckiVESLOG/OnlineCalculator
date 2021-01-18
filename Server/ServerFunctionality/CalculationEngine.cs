@@ -24,7 +24,7 @@ namespace ServerFunctionality
                     operations.Remove('^');
                     i--;
                 }
-                if (operations.ElementAt(i) == '*')
+                else if (operations.ElementAt(i) == '*')
                 {
                     numbers[i] = MulNumbers(numbers.ElementAt(i), numbers.ElementAt(i + 1));
                     numbers.RemoveAt(i + 1);
