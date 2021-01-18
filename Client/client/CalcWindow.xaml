@@ -26,13 +26,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button Background="#FF8C87" Grid.Column="4" Grid.Row="1" Content="LOGOUT" FontSize="20" FontWeight="Bold" VerticalAlignment="Top" Height="30" Click="LogoutClicked"></Button>
+        <Button Background="#FF8C87" Grid.Column="4" Grid.Row="1" Content="LOGOUT" FontSize="20" FontWeight="Bold" VerticalAlignment="Top" Height="30" Click="LogoutClicked" Initialized="LogoutInit"></Button>
 
         <ComboBox x:Name="Modes" Grid.Column="0" Grid.Row="2" Height="30" VerticalAlignment="Top" Initialized="ModesInit" FontSize="16" Text="Select mode:" ></ComboBox>
         <TextBlock x:Name="ModesLabel" Background="#234043" Text="Trigonometric:" Foreground="#FF9C87" FontSize="12" TextAlignment="Center" Height="15" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1"></TextBlock>
         <TextBlock x:Name="WPFequation" Background="AliceBlue" Text="Enter your favourite equation . . ." Foreground="#6A67B9" FontSize="16" Height="30" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"></TextBlock>
         <Button Background="#FF8C87" Grid.Column="3" Grid.Row="2" Content="RESET" FontSize="16" VerticalAlignment="Bottom" Height="25" Click="ResetClicked"></Button>
-        
+
         <Button Name="Button1" Grid.Column="1" Grid.Row="3" Content="1" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="Button2" Grid.Column="2" Grid.Row="3" Content="2" FontSize="48" Click="buttonClicked"></Button>
         <Button x:Name="Button3" Grid.Column="3" Grid.Row="3" Content="3" FontSize="48" Click="buttonClicked"></Button>

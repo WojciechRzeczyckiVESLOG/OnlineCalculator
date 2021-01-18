@@ -21,7 +21,7 @@ namespace GUI
     /// Interaction logic for CalcWindow.xaml
     /// </summary>
 
-    
+
     public partial class CalcWindow : Window
     {
         TCPclient client;
@@ -31,7 +31,7 @@ namespace GUI
         {
             InitializeComponent();
             equationText = "";
-            listenServer();
+
         }
 
         public CalcWindow(TCPclient client)
@@ -39,7 +39,7 @@ namespace GUI
             InitializeComponent();
             this.client = client;
             equationText = "";
-            listenServer();
+
         }
 
         private void buttonClicked(object sender, RoutedEventArgs e)
@@ -52,21 +52,33 @@ namespace GUI
 
         private void buttonEqualizeClicked(object sender, RoutedEventArgs e)
         {
-            try
+            if (equationText != "")
             {
-                appendMode();
-                client.receivedMessage = ""; 
-                client.SendMessage((equationText));
-                client.TryReceive();
+                try
+                {
+                    appendMode();
+                    client.receivedMessage = "";
+                    client.SendMessage((equationText));
+                    client.TryReceive();
 
-            }
-            catch (SocketException)
-            {
-                WPFequation.Text = "Connection Error!";
-            }
+                }
+                catch (SocketException)
+                {
+                    WPFequation.Text = "Connection Error!";
+                }
 
-            WPFequation.Text = client.receivedMessage;
-            equationText = "";
+                WPFequation.Text = client.receivedMessage;
+                if (WPFequation.Text == "LOGOUT")
+                {
+                    this.Hide();
+                    MainWindow window = new MainWindow();
+                    window.Show();
+
+                    this.closeCode = "LOGOUT";
+                    this.Close();
+                }
+                equationText = "";
+            }
         }
 
         private void ResetClicked(object sender, RoutedEventArgs e)
@@ -162,6 +174,7 @@ namespace GUI
 
         private void LogoutClicked(object sender, RoutedEventArgs e)
         {
+            client.SendMessage("LOGOUT");
             this.Hide();
             MainWindow window = new MainWindow();
             window.Show();
@@ -173,7 +186,7 @@ namespace GUI
         private void closedEvent(object sender, EventArgs e)
         {
             this.closeCode = "EXIT";
-                this.Close();
+            this.Close();
         }
 
         private async void listenServer()
@@ -183,8 +196,8 @@ namespace GUI
                 //comment the whole body to test offline
                 try
                 {
-                    client.receivedMessage = "";
-                    client.TryReceive();
+                    this.client.receivedMessage = "";
+                    this.client.TryReceive();
 
                 }
                 catch (SocketException)
@@ -230,20 +243,28 @@ namespace GUI
 
         private void ModesInit(object sender, EventArgs e)
         {
+
             this.BindModes();
         }
 
         private void appendMode()
         {
-            switch(Modes.SelectedIndex)
+            switch (Modes.SelectedIndex)
             {
                 case 1: break;
-                case 2: this.equationText = "sin(" + equationText + ")"; break;
-                case 3: this.equationText = "cos(" + equationText + ")"; break;
-                case 4: this.equationText = "tg(" + equationText + ")"; break;
-                case 5: this.equationText = "ctg(" + equationText + ")"; break;
+                case 2: break;
+                case 3: this.equationText = "sin(" + equationText + ")"; break;
+                case 4: this.equationText = "cos(" + equationText + ")"; break;
+                case 5: this.equationText = "tg(" + equationText + ")"; break;
+                case 6: this.equationText = "ctg(" + equationText + ")"; break;
                 default: break;
             }
         }
+
+        private void LogoutInit(object sender, EventArgs e)
+        {
+            //listenServer();
+        }
+
     }
-}
+    }
