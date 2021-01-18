@@ -18,6 +18,9 @@ namespace IO_Lab
             p1.setUserInput("cos(180)");
             p1.execute();
             Console.WriteLine(p1.getResult());
+            p1.setUserInput("sin(30^2)");
+            p1.execute();
+            Console.WriteLine(p1.getResult());
         }
     }
 }

@@ -133,6 +133,7 @@ namespace IO_Lab
                 case "ctg": result = Math.Atan2(1, ptrig.getResult() * Math.PI / 180); break;
                 default: throw new FormatException("Wrong operation.");
             }
+            if (result < 0.00000000001) result = 0;
             userInput = userInput.Insert(startIndex - 4, result.ToString());
         }
 
